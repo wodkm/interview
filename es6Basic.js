@@ -13,3 +13,5 @@ function basicTypeTest() {
     console.log(typeof Object());//"object"
     console.log(typeof Function());//"function"
 }
+
+/**test */
