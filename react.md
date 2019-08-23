@@ -22,8 +22,7 @@
 
 * componentWillUnmount: 当我们的组件被卸载或者销毁了就会调用，我们可以在这个函数里去清除一些定时器，取消网络请求，清理无效的DOM元素等垃圾清理工作
 
-
-# React Hooks优点:
+# React Hooks优点
 
 * 简洁: React Hooks解决了HOC和Render Props的嵌套问题,更加简洁
 * 解耦: React Hooks可以更方便地把 UI 和状态分离,做到更彻底的解耦
