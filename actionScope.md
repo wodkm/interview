@@ -8,7 +8,7 @@
 
 ## This
 
-* 传统中情况下this的指向其实就是活动对象指向的问题，原型链也会在这里产生作用。箭头函数中的this指向则是作用域的问题
+* 传统中情况下this的指向其实就是活动对象指向的问题，原型链也会在这里产生作用。箭头函数中的this指向则是作用域链的问题
 
 ### 五种绑定
 
@@ -126,5 +126,91 @@
 * 箭头函数不绑定this，箭头函数中的this相当于普通变量
 * 箭头函数的this寻值行为与普通变量相同，在作用域中逐级寻找
 * 箭头函数的this无法通过bind，call，apply来直接修改（可以间接修改）
+
+```javascript
+    var a = 1;
+    (()=>{console.log(this.a)}).apply({a:2});//1
+```
+
 * 改变作用域中this的指向可以改变箭头函数的this
 * eg. function closure(){()=>{//code }}，在此例中，我们通过改变封包环境closure.bind(another)()，来改变箭头函数this的指向
+
+## call和apply的模拟实现
+
+### call
+
+* es3
+
+```javascript
+    Function.prototype.call = function (context) {
+        context = context ? Object(context) : window;
+        context.fn = this;
+        var args = [];
+        for(var i = 1, len = arguments.length; i < len; i++) {
+            args.push('arguments[' + i + ']');
+        }
+        var result = eval('context.fn(' + args +')');
+        delete context.fn
+        return result;
+    }
+```
+
+* es6
+
+```javascript
+    Function.prototype.call = function (context) {
+        context = context ? Object(context) : window;
+        context.fn = this;
+
+        let args = [...arguments].slice(1);
+        let result = context.fn(...args);
+
+        delete context.fn
+        return result;
+    }
+```
+
+### apply
+
+* es3
+
+```javascript
+    Function.prototype.apply = function (context, arr) {
+        context = context ? Object(context) : window;
+        context.fn = this;
+
+        var result;
+        // 判断是否存在第二个参数
+        if (!arr) {
+            result = context.fn();
+        } else {
+            var args = [];
+            for (var i = 0, len = arr.length; i < len; i++) {
+                args.push('arr[' + i + ']');
+            }
+            result = eval('context.fn(' + args + ')');
+        }
+
+        delete context.fn
+        return result;
+    }
+```
+
+* es6
+
+```javascript
+    Function.prototype.apply = function (context, arr) {
+        context = context ? Object(context) : window;
+        context.fn = this;
+    
+        let result;
+        if (!arr) {
+            result = context.fn();
+        } else {
+            result = context.fn(...arr);
+        }
+        
+        delete context.fn
+        return result;
+    }
+```
