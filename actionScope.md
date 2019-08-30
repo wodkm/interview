@@ -202,15 +202,28 @@
     Function.prototype.apply = function (context, arr) {
         context = context ? Object(context) : window;
         context.fn = this;
-    
         let result;
         if (!arr) {
             result = context.fn();
         } else {
             result = context.fn(...arr);
         }
-        
         delete context.fn
         return result;
+    }
+```
+
+## bind
+
+### 利用bind实现一个无限加和函数
+
+* 无限调用本质上意味着返回函数的同时将上一次的结果传递下去
+* 避免无意中使用了全局变量，这有违初衷
+
+```javascript
+    function add(num){
+        const sum = (arguments[1] || 0) + num;
+        console.log(sum);
+        return add.bind(this, sum)
     }
 ```
