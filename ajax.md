@@ -1,0 +1,5 @@
+# AJAX
+
+## XMLHttpRequest
+
+## fetch
